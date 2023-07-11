@@ -56,7 +56,7 @@ pipeline {
       steps{
         script {
           sh """#!/bin/sh
-            BUILD_NUMBER=25
+            BUILD_NUMBER=26
 
             echo "Creating config map and secrets"
             /usr/local/bin/kubectl apply -f ./1-app-config-and-secret.yml
