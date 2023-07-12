@@ -66,7 +66,7 @@ pipeline {
             sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
 
             echo 'Creating mysql pod and service'
-            sh '/usr/local/bin/kubectl apply -f 3-mysql-deployment-service.yml'
+            sh '/usr/local/bin/kubectl apply -f 3-mysql-deploy-service.yml'
 
             sleep(30)
             echo 'Creating java app deployments'

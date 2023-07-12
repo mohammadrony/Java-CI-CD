@@ -6,19 +6,19 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: library-app-apache
+      app: java-app
   template:
     metadata:
       labels:
-        app: library-app-apache
+        app: java-app
     spec:
       terminationGracePeriodSeconds: 60
       containers:
-      - name: library-app-apache
+      - name: java-app
         image: "mohammadrony/java-library-app:${BUILD_NUMBER}"
-        imagePullPolicy: "Always"
         ports:
         - containerPort: 8080
+        imagePullPolicy: "Always"
 
 ---
 apiVersion: v1
@@ -27,10 +27,10 @@ metadata:
   name: library-app-service
 spec:
   selector:
-    app: library-app-apache
+    app: java-app
   ports:
   - protocol: TCP
-    port: 80
+    port: 8080
     targetPort: 8080
     nodePort: 30080
   type: NodePort
