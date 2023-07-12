@@ -1,7 +1,7 @@
 pipeline {
   agent any
   triggers {
-      pollSCM 'H * * * *'
+      pollSCM('H * * * *')
   }
   tools {
     maven 'MAVEN_3'
@@ -35,7 +35,7 @@ pipeline {
       }
     }
     stage('Push Docker Image') {
-      steps{
+      steps {
         script {
           docker.withRegistry("https://${REGISTRY}", DOCKERHUB_CREDS) {
             app_image.push("${BUILD_NUMBER}")
@@ -47,8 +47,10 @@ pipeline {
 
     stage('Remove Unused docker image') {
       steps {
-        sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:latest"
-        sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:${BUILD_NUMBER}"
+        script {
+          sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:latest"
+          sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:${BUILD_NUMBER}"
+        }
       }
     }
 
@@ -58,16 +60,18 @@ pipeline {
             echo "${BUILD_NUMBER}"
 
             echo 'Creating config map and secrets'
-            sh '/usr/local/bin/kubectl apply -f ./1-app-config-and-secret.yml'
+            sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
 
             echo 'Creating storage for mysql'
-            sh '/usr/local/bin/kubectl apply -f ./2-mysql-pv-pvc.yml'
+            sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
 
             echo 'Creating mysql pod and service'
-            sh '/usr/local/bin/kubectl apply -f ./3-mysql-pod-service.yml'
+            sh '/usr/local/bin/kubectl apply -f 3-mysql-deployment-service.yml'
 
+            sleep(30)
             echo 'Creating java app deployments'
-            sh '/usr/local/bin/kubectl apply -f ./4-java-app-deploy.yml'
+            sh 'sed -i "s/\\${BUILD_NUMBER}/${BUILD_NUMBER}/" 4-java-app-deploy.yml'
+            sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'
         }
       }
     }

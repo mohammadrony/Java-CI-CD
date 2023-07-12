@@ -14,12 +14,12 @@ spec:
     spec:
       terminationGracePeriodSeconds: 60
       containers:
-        - name: library-app-apache
-          image: "mohammadrony/java-library-app:${BUILD_NUMBER}"
-          imagePullPolicy: "Always"
-          ports:
-            - containerPort: 8080
-            
+      - name: library-app-apache
+        image: "mohammadrony/java-library-app:${BUILD_NUMBER}"
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 8080
+
 ---
 apiVersion: v1
 kind: Service
@@ -34,4 +34,4 @@ spec:
     targetPort: 8080
     nodePort: 30080
   type: NodePort
-  
+
