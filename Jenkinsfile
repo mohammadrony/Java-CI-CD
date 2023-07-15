@@ -1,7 +1,7 @@
 pipeline {
   agent any
   triggers {
-      pollSCM('H * * * *')
+    pollSCM('H * * * *')
   }
   tools {
     maven 'Maven_3'
@@ -16,15 +16,15 @@ pipeline {
     stage('Git clone') {
       steps {
         echo 'Pulling repository'
-        git branch: 'main', url: 'https://github.com/mohammadrony/Java-app-CI-CD-pipeline .git'
+        git branch: 'main', url: 'https://github.com/mohammadrony/Java-app-CI-CD-pipeline.git'
       }
     }
 
     stage('Build artifact') {
-        steps {
-            echo 'Constructing artifact'
-            sh 'mvn clean package'
-        }
+      steps {
+        echo 'Constructing artifact'
+        sh 'mvn clean package'
+      }
     }
 
     stage('Building image') {
@@ -57,21 +57,21 @@ pipeline {
     stage('Deploy containers') {
       steps {
         withKubeConfig(credentialsId: 'kubeconfig', serverUrl: '') {
-            echo "${BUILD_NUMBER}"
+          echo "${BUILD_NUMBER}"
 
-            echo 'Creating config map and secrets'
-            sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
+          echo 'Creating config map and secrets'
+          sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
 
-            echo 'Creating storage for mysql'
-            sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
+          echo 'Creating storage for mysql'
+          sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
 
-            echo 'Creating mysql pod and service'
-            sh '/usr/local/bin/kubectl apply -f 3-mysql-deploy-service.yml'
+          echo 'Creating mysql pod and service'
+          sh '/usr/local/bin/kubectl apply -f 3-mysql-deploy-service.yml'
 
-            sleep(30)
-            echo 'Creating java app deployments'
-            sh 'sed -i "s/\\${BUILD_NUMBER}/${BUILD_NUMBER}/" 4-java-app-deploy.yml'
-            sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'
+          sleep(30)
+          echo 'Creating java app deployments'
+          sh 'sed -i "s/\\${BUILD_NUMBER}/${BUILD_NUMBER}/" 4-java-app-deploy.yml'
+          sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'
         }
       }
     }
