@@ -13,45 +13,44 @@ spec:
         app: library-mysql-server
     spec:
       containers:
-      - name: library-mysql-server
-        image: "mysql:5.6"
-        ports:
-        - containerPort: 3306
-        env:
-        - name: MYSQL_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: library-mysql-config
-              key: MYSQL_PORT
-        - name: MYSQL_USER
-          valueFrom:
-            configMapKeyRef:
-              name: library-mysql-config
-              key: MYSQL_USER
-        - name: MYSQL_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: library-mysql-config
-              key: MYSQL_DATABASE
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: library-mysql-secret
-              key: MYSQL_ROOT_PASSWORD
-        volumeMounts:
-        - name: library-mysql-storage
-          mountPath: /var/lib/mysql
-        - name: mysql-initdb
-          mountPath: /docker-entrypoint-initdb.d
+        - name: library-mysql-server
+          image: "mysql:8"
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: library-mysql-config
+                  key: MYSQL_PORT
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: library-mysql-config
+                  key: MYSQL_USER
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: library-mysql-config
+                  key: MYSQL_DATABASE
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: library-mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: library-mysql-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
 
       volumes:
-      - name: library-mysql-storage
-        persistentVolumeClaim:
-          claimName: library-mysql-pvc
-      - name: mysql-initdb
-        configMap:
-          name: mysql-initdb-config
-
+        - name: library-mysql-storage
+          persistentVolumeClaim:
+            claimName: library-mysql-pvc
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-config
 
 ---
 apiVersion: v1
@@ -62,7 +61,6 @@ spec:
   selector:
     app: library-mysql-server
   ports:
-  - protocol: TCP
-    port: 3306
-    targetPort: 3306
-
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306

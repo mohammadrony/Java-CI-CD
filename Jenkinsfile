@@ -4,7 +4,7 @@ pipeline {
       pollSCM('H * * * *')
   }
   tools {
-    maven 'MAVEN_3'
+    maven 'Maven_3'
   }
   environment {
     DOCKERHUB_CREDS = 'docker_credentials'
@@ -16,7 +16,7 @@ pipeline {
     stage('Git clone') {
       steps {
         echo 'Pulling repository'
-        git branch: 'main', url: 'https://github.com/mohammadrony/Java-app-CI-CD-pipeline.git'
+        git branch: 'main', url: 'https://github.com/mohammadrony/Java-app-CI-CD-pipeline .git'
       }
     }
 
