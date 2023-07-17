@@ -6,7 +6,7 @@ Library Management System developed in Spring Boot, JPA, Hibernate, MySQL HTML, 
 
 It allows user to manage Members, Categories, Books and Issueing Books.
 
-## Project Setup
+## Project setup for Amazon Linux
 
 ### Login to EC2 instance with .pem key
 
@@ -14,10 +14,19 @@ It allows user to manage Members, Categories, Books and Issueing Books.
 ssh -i <pem-file> ec2-user@<ip-address>
 ```
 
-### Install Java and MySQL client app
+### Setup Java and MySQL client
+
+#### Install Java and MySQL client app in Amazon linux 2023
 
 ```bash
 sudo dnf install -y mariadb105 java-11-amazon-corretto java-11-amazon-corretto-devel
+```
+
+#### Install Java and MySQL client app in Amazon linux 2
+
+```bash
+sudo amazon-linux-extras install java-openjdk11
+sudo yum install -y mysql
 ```
 
 ### You can install Maven if you build in EC2
@@ -26,15 +35,12 @@ sudo dnf install -y mariadb105 java-11-amazon-corretto java-11-amazon-corretto-d
 sudo dnf install -y maven
 ```
 
-### Install tomcat server
+## Prepare database server
 
-### Run tomcat server in port 80
-
-### Create _librarydb_ database in db host
+### Create user and  database in database host
 
 ```bash
-mysql -h <host> -P 3306 -u root -p12345678 -e "CREATE DATABASE librarydb"
-mysql -h <host> -P 3306 -u root -p12345678 -e "source <db-script.sql>"
+mysql -h <host> -P 3306 -u root -p12345678 -e "source <librarydb.sql>"
 ```
 
 ### Build the application with maven command
@@ -58,7 +64,7 @@ java -jar target/*.jar
 
 ## Browser app from browser
 
-- Visit <http://ip-address:8080> to access the software from browser.
+- Visit <http://ip-address:8080> with defined port to access the software from browser.
 - Use username 'admin' and password 'admin' for first login.
 
 Thank you.
