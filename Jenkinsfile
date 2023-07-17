@@ -44,7 +44,9 @@ pipeline {
           
           sh 'sed -i "s/\\${ec2_host}/${ec2_host}/" start-app.sh'
           sh 'sed -i "s/\\${ec2_key_file}/${ec2_key_file}/" start-app.sh'
-          sh "source ./start-app.sh"
+
+          sh "ssh -i ${ec2_key_file} ec2-user@${ec2_host} 'pkill -9 -f \"java -jar\"'"
+          sh "ssh -i ${ec2_key_file} ec2-user@${ec2_host} 'nohup java -jar ~/*.jar &'"
         }
       }
     }
