@@ -46,7 +46,7 @@ pipeline {
           sh 'sed -i "s/\\${ec2_key_file}/${ec2_key_file}/" start-app.sh'
 
           sh "ssh -i ${ec2_key_file} ec2-user@${ec2_host} 'pkill -9 -f \"java -jar\"'"
-          sh "ssh -i ${ec2_key_file} ec2-user@${ec2_host} 'nohup java -jar ~/*.jar &'"
+          sh "ssh -i ${ec2_key_file} ec2-user@${ec2_host} 'nohup java -jar spark-lms-*.jar > log.txt 2>&1 &'"
         }
       }
     }
