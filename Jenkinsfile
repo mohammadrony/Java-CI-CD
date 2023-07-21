@@ -41,7 +41,7 @@ pipeline {
       steps {
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ssh_key', keyFileVariable: 'ec2_key_file')]) {
           echo 'Start app in EC2'
-          sh "ssh -i ${ec2_key_file} ec2-user@${ec2_host} 'kill -9 java || true'"
+          sh "ssh -i ${ec2_key_file} ec2-user@${ec2_host} 'pkill -9 java || true'"
           sh "ssh -i ${ec2_key_file} ec2-user@${ec2_host} 'nohup java -jar ~/spark-lms-*.jar > ~/log.txt 2>&1 &'"
         }
       }
