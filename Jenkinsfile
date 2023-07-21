@@ -14,14 +14,14 @@ pipeline {
   }
 
   stages {
-    stage('Git clone') {
+    stage('Git Clone') {
       steps {
         echo 'Pulling repository'
-        git branch: 'aws', url: 'https://github.com/mohammadrony-bjit/library-management-system.git'
+        git branch: 'aws', credentialsId: 'gitlab_ssh_key', url: 'git@gitlab.com:gitlab-learning-projects/java-app-ci-cd-pipeline.git'
       }
     }
 
-    stage('Build artifact') {
+    stage('Build Artifact') {
       steps {
         echo 'Constructing artifact'
         sh 'mvn clean package'
@@ -37,7 +37,7 @@ pipeline {
       }
     }
 
-    stage('Update running app') {
+    stage('Update Running App') {
       steps {
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ssh_key', keyFileVariable: 'ec2_key_file')]) {
           echo 'Start app in EC2'
