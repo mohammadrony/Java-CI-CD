@@ -1,3 +1,7 @@
+# Deploy Java MySQL app in AWS cloud with CI/CD Pipeline
+
+A complete project with Jenkins pipeline pulling Github repository to build and deploy in Amazon cloud.
+
 ## Project Description
 
 Library Management System developed in Spring Boot, JPA, Hibernate, MySQL HTML, CSS, JavaScript.
@@ -64,7 +68,7 @@ java -jar target/*.jar
 
 ## Browser app from browser
 
-- Visit <http://ip-address:8080> with defined port to access the software from browser.
+- Visit <http://ip-address:8080> to access the software from browser.
 - Use username 'admin' and password 'admin' for first login.
 
 Thank you.

@@ -17,7 +17,7 @@ pipeline {
     stage('Git Clone') {
       steps {
         echo 'Pulling repository'
-        git branch: 'aws', credentialsId: 'gitlab_ssh_key', url: 'git@gitlab.com:gitlab-learning-projects/java-app-ci-cd-pipeline.git'
+        git branch: 'aws', url: 'https://github.com/mohammadrony/Java-app-CI-CD-pipeline.git'
       }
     }
 
@@ -32,6 +32,7 @@ pipeline {
       steps {
         withCredentials([sshUserPrivateKey(credentialsId: 'aws_ssh_key', keyFileVariable: 'ec2_key_file')]) {
           echo 'Deploy app to EC2 instance'
+          sh "ssh-keygen -R ${ec2_host}"
           sh "scp -o StrictHostKeyChecking=no -i ${ec2_key_file} target/*.jar ec2-user@${ec2_host}:~/"
         }
       }
