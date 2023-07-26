@@ -3,9 +3,12 @@ pipeline {
   triggers {
     pollSCM('H * * * *')
   }
+  
   tools {
     maven 'Maven_3'
+    git 'Git'
   }
+
   environment {
     DOCKERHUB_CREDS = 'docker_credentials'
     DOCKER_IMAGE = 'mohammadrony/java-library-app'
@@ -13,28 +16,29 @@ pipeline {
   }
 
   stages {
-    stage('Git clone') {
+    stage('Git Clone') {
       steps {
         echo 'Pulling repository'
         git branch: 'main', url: 'https://github.com/mohammadrony/Java-app-CI-CD-pipeline.git'
       }
     }
 
-    stage('Build artifact') {
-      steps {
-        echo 'Constructing artifact'
-        sh 'mvn clean package'
-      }
+    stage('Build Artifact') {
+        steps {
+            echo 'Constructing artifact'
+            sh 'mvn clean package'
+        }
     }
 
-    stage('Building image') {
+    stage('Build Container Image') {
       steps {
         script {
           app_image = docker.build("${REGISTRY}/${DOCKER_IMAGE}")
         }
       }
     }
-    stage('Push Docker Image') {
+    
+    stage('Publish Docker Image') {
       steps {
         script {
           docker.withRegistry("https://${REGISTRY}", DOCKERHUB_CREDS) {
@@ -45,7 +49,7 @@ pipeline {
       }
     }
 
-    stage('Remove Unused docker image') {
+    stage('Remove Image from Local') {
       steps {
         script {
           sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:latest"
@@ -54,24 +58,22 @@ pipeline {
       }
     }
 
-    stage('Deploy containers') {
+    stage('Deploy App in Kubernetes') {
       steps {
         withKubeConfig(credentialsId: 'kubeconfig', serverUrl: '') {
-          echo "${BUILD_NUMBER}"
+            echo 'Creating config map and secrets'
+            sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
 
-          echo 'Creating config map and secrets'
-          sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
+            echo 'Creating storage for mysql'
+            sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
 
-          echo 'Creating storage for mysql'
-          sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
+            echo 'Creating mysql pod and service'
+            sh '/usr/local/bin/kubectl apply -f 3-mysql-deploy-service.yml'
 
-          echo 'Creating mysql pod and service'
-          sh '/usr/local/bin/kubectl apply -f 3-mysql-deploy-service.yml'
-
-          sleep(30)
-          echo 'Creating java app deployments'
-          sh 'sed -i "s/\\${BUILD_NUMBER}/${BUILD_NUMBER}/" 4-java-app-deploy.yml'
-          sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'
+            sleep(30)
+            echo 'Creating java app deployments'
+            sh 'sed -i "s/\\${BUILD_NUMBER}/${BUILD_NUMBER}/" 4-java-app-deploy.yml'
+            sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'
         }
       }
     }
