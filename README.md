@@ -2,7 +2,7 @@
 
 A complete CI/CD project with Jenkins pipeline to build and deploy a Github repository in kubernetes cluster.
 
-_Follow [aws](https://github.com/mohammadrony/Java-app-CI-CD-pipeline/tree/aws) branch for AWS cloud deployment steps._
+_Follow [aws branch](https://github.com/mohammadrony/Java-app-CI-CD-pipeline/tree/aws) for AWS cloud deployment steps._
 
 ## Project Description
 
