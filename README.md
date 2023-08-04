@@ -1,74 +1,76 @@
 # Deploy Java MySQL app in AWS cloud with CI/CD Pipeline
 
-A complete project with Jenkins pipeline pulling Github repository to build and deploy in Amazon cloud.
+A complete CI/CD project with Jenkins pipeline to build and deploy a GitLab repository in AWS cloud.
 
 ## Project Description
 
-Library Management System developed in Spring Boot, JPA, Hibernate, MySQL HTML, CSS, JavaScript.
+Prepared EC2 Launch template to run with Auto-scaling. Configured a Route 53 domain and TLS certificate with a Load balancer for the application. Prepared RDS database for the VPC network. Configured a Jenkins CI/CD pipeline to build and run a Java application in an EC2 instance.
 
-### What does it offer?
+### Architecture Diagram
 
-It allows user to manage Members, Categories, Books and Issueing Books.
+![AWS cloud deployment architecture diagram](./data/AWS-server-deploy-architecture-diagram.png)
 
-## Project setup for Amazon Linux
+## Project Setup
 
-### Login to EC2 instance with .pem key
+### Pre-requisites
 
-```bash
-ssh -i <pem-file> ec2-user@<ip-address>
-```
+Prepare one virtual machines in RHEL 9 equivalent environment.
 
-### Setup Java and MySQL client
+### Setup AWS services
 
-#### Install Java and MySQL client app in Amazon linux 2023
+- Create VPC, subnets, and route tables
+- Create EC2 instance launch template with a [script](./data/launch-template-user-data-personal.txt) (user-data)
+- Create SSL/TLS Certificate for Load balancer
+- Create Auto scaling group and Load balancer
+- Create RDS database
+- Create Route 53 hosted zone
 
-```bash
-sudo dnf install -y mariadb105 java-11-amazon-corretto java-11-amazon-corretto-devel
-```
+### Setup Gitlab repository
 
-#### Install Java and MySQL client app in Amazon linux 2
+- Create Gitlab repository
+- Configure SSH key with developer and Gitlab.
 
-```bash
-sudo amazon-linux-extras install java-openjdk11
-sudo yum install -y mysql
-```
+### Prepare Jenkins server
 
-### You can install Maven if you build in EC2
+#### Install Jenkins by Ansible
 
-```bash
-sudo dnf install -y maven
-```
+Follow this [jenkins-docker-setup-playbook](https://github.com/mohammadrony/jenkins-docker-setup-playbook) to setup Jenkins server by running Ansible playbook. Please note that we only need [jenkins-setup](https://github.com/mohammadrony/jenkins-docker-setup-playbook/tree/main/jenkins-setup) role for this application.
 
-## Prepare database server
+#### Configure Jenkins server tools and credentials
 
-### Create user and  database in database host
+Tools setup:
 
-```bash
-mysql -h <host> -P 3306 -u root -p12345678 -e "source <librarydb.sql>"
-```
+- JDK - Name: `Java_11`, JAVA_HOME: `/usr/lib/jvm/java-11-openjdk`
+- Git - Name: `Git`, Path executable: `/usr/bin/git`
+- Maven - Name: `Maven_3`, MAVEN_HOME: `/usr/share/maven`
 
-### Build the application with maven command
+Credentials setup:
 
-```bash
-mvn clean package
-```
+- Kind: 'SSH Username with private key', ID: `aws_ssh_key`, Username: `<username>`, Private key: Enter directly `<ssh-private-key>`.
+- Kind: 'SSH Username with private key', ID: `gitlab_ssh_key`, Username: `<username>`, Private key: Enter directly `<ssh-private-key>`.
 
-### Run the app in running host
+#### Configure new pipeline from Jenkins dashboard
 
-```bash
-java -jar target/*.jar
-```
+- Create New Item > Enter name (aws-deploy) > Select 'Pipeline' type.
+- Goto 'Your pipeline' > Configure > Select Poll SCM > Set schedule `H/2 * * * *` > Select Pipeline script from SCM > Repository URL > Select your branch to build > Script Path (Jenkinsfile) > Save.
+- Goto 'Your pipeline' > Build Now.
 
-### Run the pipeline to automate the deployment
+### Update application.properties for database host
 
-- Setup Jenkins host server.
-- Configure necessery tools and plugins for the app.
-- Setup credentials for repository and app server.
-- Run the pipeline to automate the deployment process.
+Update RDS database host name in [application.properties](src/main/resources/application.properties) file.
+
+## Deploy new update with CI/CD pipeline
+
+Creating new commit in the repository will trigger a new build with following stages:
+
+- Git Clone
+- Build Artifact
+- Push app to EC2
+- Update Running App
 
 ## Browser app from browser
 
-- Visit <http://ip-address:8080> to access the software from browser.
-- Use username 'admin' and password 'admin' for first login.
+- Visit http://your-domain.com from your local browser.
+- Use username 'admin' and password 'admin' to login to the dashboard.
 
 Thank you.
