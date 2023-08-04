@@ -68,7 +68,7 @@ Creating new commit in the repository will trigger a new build with following st
 
 ## Browse the application from a browser
 
-- Visit <http://worker-ip-address> from your local browser.
+- Visit <http://worker-node-address> from your local browser.
 - Use username 'admin' and password 'admin' to login to the dashboard.
 
 Thank you.
