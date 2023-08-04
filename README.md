@@ -4,7 +4,7 @@ A complete CI/CD project with Jenkins pipeline to build and deploy a GitLab repo
 
 ## Project Description
 
-Prepared EC2 Launch template to run with Auto-scaling. Configured a Route 53 domain and TLS certificate with a Load balancer for the application. Prepared RDS database for the VPC network. Configured a Jenkins CI/CD pipeline to build and run a Java application in an EC2 instance.
+Prepare EC2 Launch template to run with Auto-scaling. Configure a Route 53 domain and TLS certificate with a Load balancer for the application. Prepare RDS database for the VPC network. Configure a Jenkins CI/CD pipeline to build and run a Java application in an EC2 instance.
 
 ### Architecture Diagram
 
@@ -23,7 +23,7 @@ Prepare one virtual machines in RHEL 9 equivalent environment.
 - Create SSL/TLS Certificate for Load balancer
 - Create Auto scaling group and Load balancer
 - Create RDS database
-- Create Route 53 hosted zone
+- Create Route 53 domain
 
 ### Setup Gitlab repository
 
@@ -49,7 +49,7 @@ Credentials setup:
 - Kind: 'SSH Username with private key', ID: `aws_ssh_key`, Username: `<username>`, Private key: Enter directly `<ssh-private-key>`.
 - Kind: 'SSH Username with private key', ID: `gitlab_ssh_key`, Username: `<username>`, Private key: Enter directly `<ssh-private-key>`.
 
-#### Configure new pipeline from Jenkins dashboard
+#### Configure new pipeline from dashboard
 
 - Create New Item > Enter name (aws-deploy) > Select 'Pipeline' type.
 - Goto 'Your pipeline' > Configure > Select Poll SCM > Set schedule `H/2 * * * *` > Select Pipeline script from SCM > Repository URL > Select your branch to build > Script Path (Jenkinsfile) > Save.
@@ -68,7 +68,7 @@ Creating new commit in the repository will trigger a new build with following st
 - Push app to EC2
 - Update Running App
 
-## Browser app from browser
+## Browse the application from a browser
 
 - Visit http://your-domain.com from your local browser.
 - Use username 'admin' and password 'admin' to login to the dashboard.
