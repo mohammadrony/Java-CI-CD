@@ -2,6 +2,8 @@
 
 A complete CI/CD project with Jenkins pipeline to build and deploy a Github repository in kubernetes cluster.
 
+_Follow [aws](https://github.com/mohammadrony/Java-app-CI-CD-pipeline/tree/aws) branch for AWS cloud deployment steps._
+
 ## Project Description
 
 Initially, configure a Kubernetes cluster with 1 master node, 1 worker node and a Jenkins server with Docker and Kubectl setup by Ansible playbook. Then automate build and publish of a Java application with MySQL database in Kubernetes cluster using CI/CD pipeline.
