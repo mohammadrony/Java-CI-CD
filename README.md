@@ -30,7 +30,7 @@ Follow this [jenkins-docker-setup-playbook](https://github.com/mohammadrony/jenk
 
 #### Plugins and tools setup from Jenkins dashboard
 
-Plugins installation:
+Install Plugins:
 
 - Docker
 - Docker Common
