@@ -51,7 +51,7 @@ Credentials setup:
 
 Security setup:
 
-Goto Manage Jenkins > Security > Git Host Key Verification Configuration >  Host Key Verification Strategy > Select 'Accept first connection' > Save.
+- Goto Manage Jenkins > Security > Git Host Key Verification Configuration >  Host Key Verification Strategy > Select 'Accept first connection' > Save.
 
 #### Configure new pipeline from dashboard
 
