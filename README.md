@@ -49,6 +49,10 @@ Credentials setup:
 - Kind: 'SSH Username with private key', ID: `aws_ssh_key`, Username: `<username>`, Private key: Enter directly `<ssh-private-key>`.
 - Kind: 'SSH Username with private key', ID: `gitlab_ssh_key`, Username: `<username>`, Private key: Enter directly `<ssh-private-key>`.
 
+Security setup:
+
+Goto Manage Jenkins > Security > Git Host Key Verification Configuration >  Host Key Verification Strategy > Select 'Accept first connection' > Save.
+
 #### Configure new pipeline from dashboard
 
 - Create New Item > Enter name (aws-deploy) > Select 'Pipeline' type.
