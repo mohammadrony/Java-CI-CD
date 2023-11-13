@@ -16,7 +16,7 @@ Initially, configure a Kubernetes cluster with 1 master node, 1 worker node and 
 
 ### Pre-requisites
 
-Prepare three virtual machines in RHEL 9 equivalent environment. One of them is to be used for the Kubernetes master node, one is to be used for the Kubernetes worker node and the third is for the Jenkins server.
+Prepare three virtual machines in RHEL 9 equivalent environment. One of them is for the Kubernetes master node, another one is for the worker node and the third is for the Jenkins server.
 
 ### Prepare Kubernetes cluster using Ansible
 
@@ -33,10 +33,8 @@ Follow this [jenkins-docker-setup-playbook](https://github.com/mohammadrony/jenk
 Install Plugins:
 
 - Docker
-- Docker Common
 - Docker Pipeline
 - Kubernetes
-- Kubernetes Credentials
 - Kubernetes CLI
 
 Tools setup:
