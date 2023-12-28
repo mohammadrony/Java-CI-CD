@@ -1,12 +1,11 @@
 pipeline {
   agent any
   triggers {
-    pollSCM('H * * * *')
+    pollSCM('H/2 * * * *')
   }
   
   tools {
     maven 'Maven_3'
-    git 'Git'
   }
 
   environment {
@@ -19,7 +18,7 @@ pipeline {
     stage('Git Clone') {
       steps {
         echo 'Pulling repository'
-        git branch: 'main', url: 'https://github.com/mohammadrony/Java-app-CI-CD-pipeline.git'
+        git branch: 'main', url: 'https://github.com/mohammadrony/Java-CI-CD.git'
       }
     }
 
@@ -45,13 +44,7 @@ pipeline {
             app_image.push("${BUILD_NUMBER}")
             app_image.push('latest')
           }
-        }
-      }
-    }
-
-    stage('Remove Image from Local') {
-      steps {
-        script {
+          echo "Remove Image from Local"
           sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:latest"
           sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:${BUILD_NUMBER}"
         }
@@ -70,7 +63,6 @@ pipeline {
             echo 'Creating mysql pod and service'
             sh '/usr/local/bin/kubectl apply -f 3-mysql-deploy-service.yml'
 
-            sleep(30)
             echo 'Creating java app deployments'
             sh 'sed -i "s/\\${BUILD_NUMBER}/${BUILD_NUMBER}/" 4-java-app-deploy.yml'
             sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'

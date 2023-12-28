@@ -1,8 +1,8 @@
 # Deploy Java MySQL app with CI/CD Pipeline
 
-A complete CI/CD project with Jenkins pipeline to build and deploy a Github repository in kubernetes cluster.
+A complete CI/CD project to build and publish an application by Jenkins to the Kubernetes cluster.
 
-_Follow [aws branch](https://github.com/mohammadrony/Java-app-CI-CD-pipeline/tree/aws) for AWS cloud deployment steps._
+_Follow [aws branch](https://github.com/mohammadrony/Java-CI-CD/tree/aws) for AWS cloud deployment steps._
 
 ## Project Description
 
@@ -10,7 +10,7 @@ Initially, configure a Kubernetes cluster with 1 master node, 1 worker node and 
 
 ### Architecture diagram
 
-![On-premise deployment architecture diagram](./images/On-premise-deploy-architecture-diagram.png)
+![On-premise deployment architecture diagram](./images/On-premise-architecture-diagram.png)
 
 ## Project Setup
 
@@ -63,12 +63,9 @@ Creating new commit in the repository will trigger a new build with following st
 - Build Artifact
 - Build Container Image
 - Publish Docker Image
-- Remove Image from Local
 - Deploy App in Kubernetes
 
 ## Browse the application from a browser
 
 - Visit <http://worker-node-address> from your local browser.
 - Use username 'admin' and password 'admin' to login to the dashboard.
-
-Thank you.
