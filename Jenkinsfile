@@ -6,11 +6,10 @@ pipeline {
   
   tools {
     maven 'Maven_3'
-    git 'Git'
   }
 
   environment {
-      ec2_host = "44.227.56.158"
+      ec2_host = "100.100.100.100"
   }
 
   stages {

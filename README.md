@@ -1,6 +1,6 @@
-# Deploy Java MySQL app in AWS cloud with CI/CD Pipeline
+# Deploy Java MySQL app in AWS with CI/CD Pipeline
 
-A complete CI/CD project with Jenkins pipeline to build and deploy a GitLab repository in AWS cloud.
+A complete CI/CD project to build and publish an application by Jenkins to AWS cloud.
 
 ## Project Description
 
@@ -8,7 +8,7 @@ Prepare EC2 Launch template to run with Auto-scaling. Configure a Route 53 domai
 
 ### Architecture Diagram
 
-![AWS cloud deployment architecture diagram](./data/AWS-server-deploy-architecture-diagram.png)
+![AWS cloud deployment architecture diagram](./data/AWS-architecture-diagram.png)
 
 ## Project Setup
 
@@ -19,10 +19,10 @@ Prepare one virtual machines in RHEL 9 equivalent environment.
 ### Setup AWS services
 
 - Create VPC, subnets, and route tables
-- Create EC2 instance launch template with a [script](./data/launch-template-user-data-personal.txt) (user-data)
+- Create RDS database
+- Create EC2 instance with launch template and [user-data](./data/launch-template-user-data.txt) (launch script)
 - Create SSL/TLS Certificate for Load balancer
 - Create Auto scaling group and Load balancer
-- Create RDS database
 - Create Route 53 domain
 
 ### Setup Gitlab repository
@@ -61,7 +61,29 @@ Security setup:
 
 ### Update application.properties for database host
 
-Update RDS database host name in [application.properties](src/main/resources/application.properties) file.
+Update RDS database host name in application.properties
+
+```sh
+vi src/main/resources/application.properties
+```
+
+```properties
+spring.datasource.url = jdbc:mysql://<db-host>:3306/librarydb?useSSL=true&createDatabaseIfNotExist=true
+```
+
+### Update variable in Jenkins
+
+Update ec2 ip address in Jenkinsfile
+
+```sh
+vi Jenkinsfile
+```
+
+```Jenkinsfile
+  environment {
+      ec2_host = "100.100.100.100"
+  }
+```
 
 ## Deploy new update with CI/CD pipeline
 
@@ -74,7 +96,7 @@ Creating new commit in the repository will trigger a new build with following st
 
 ## Browse the application from a browser
 
-- Visit https://your-domain.com from your local browser.
+- Visit <https://your-domain.com> from your local browser.
 - Use username 'admin' and password 'admin' to login to the dashboard.
 
 Thank you.
